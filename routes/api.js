@@ -8,16 +8,27 @@ const model = require('../model/schema.js');
 router.get("/get",(req,res)=>{
 	model.find((err,data)=>{
 		if(err) return res.json({success:false,err:err});
-			return res.json({success:true,data:data});
+			return res.json({success:true,data:data.json});
 	})
 })
+
+
+
 function randomindex(n){
   var min=1;
   var max=1000;
-  var random=Math.floor(Math.random()*(max - min)+ min)%n;
+  var random=Math.floor((Math.random()*(max - min) )+ min)%n;
   return random;
 }
-const Transactions = [{
+
+function myTimer()
+{
+  console.log(Transactions[randomindex(10)]);
+  
+}
+setInterval(myTimer, 5000);
+
+var Transactions = [{
   TransactionId:"0",
   Amount:"100",
   SameBank:"Yes"
@@ -68,12 +79,13 @@ const Transactions = [{
   SameBank:"Yes"
 }
 ];
-console.log(Transactions);  
-// const random=randomindex(10);
+// console.log(Transactions);  
+// let random=randomindex(10);
 // console.log(random);
 
 // console.log(Transactions[random] );
-
+// random=randomindex(10);
+// console.log(Transactions[random] );
 const sms = function(props){
 const accountSid = 'AC11f77761f6188a0c8025e85f0c72a88e';
 const authToken = '874f20a0848ddf090926b93b88c8e378';
@@ -90,24 +102,16 @@ client.messages
 }
 
 router.post("/post",(req,res)=>{
-	const {Name,AccountNumber,IFSCCode,SameBank,FreeWithdrawl,RegNumber}=req.body;
+	const {Name,AccountNumber,IFSCCode,RegNumber,Password}=req.body;
 	const user = new model();
 
-    let currentdate =new Date();
-    var datetime = currentdate.getDate() + "/"
-                + (currentdate.getMonth()+1)  + "/" 
-                + currentdate.getFullYear() + " @ "  
-                + currentdate.getHours() + ":"  
-                + currentdate.getMinutes() + ":" 
-                + currentdate.getSeconds();
 
   user.Name=Name;
 	user.AccountNumber=IFSCCode;
 	user.IFSCCode=IFSCCode;
-  user.SameBank=SameBank;
-  user.FreeWithdrawl=FreeWithdrawl;
+  user.FreeWithdrawl=2;
 	user.RegNumber=RegNumber;
-  user.Time=datetime;
+  user.Password=Password;
 
   	user.save()
 	.then(()=>{console.log({postSuccess:true})},res.json({user}))
