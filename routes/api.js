@@ -8,7 +8,7 @@ const model = require('../model/schema.js');
 router.get("/get",(req,res)=>{
 	model.find((err,data)=>{
 		if(err) return res.json({success:false,err:err});
-			return res.json({success:true,data:data.json});
+			return res.json({success:true,data:data});
 	})
 })
 
