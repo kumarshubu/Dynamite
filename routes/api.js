@@ -16,16 +16,10 @@ const sms = function(props){
 const accountSid = 'AC11f77761f6188a0c8025e85f0c72a88e';
 const authToken = '874f20a0848ddf090926b93b88c8e378';
 const client = require('twilio')(accountSid, authToken);
-    let currentdate =new Date();
-    var datetime = currentdate.getDate() + "/"
-                + (currentdate.getMonth()+1)  + "/" 
-                + currentdate.getFullYear() + " @ "  
-                + currentdate.getHours() + ":"  
-                + currentdate.getMinutes() + ":" 
-                + currentdate.getSeconds();
+
 client.messages
   .create({
-     body: `Account No : ${props.AccountNumber} IFSC Code : ${props.IFSCCode} Amount Debited: Rs${props.Balance} on ${datetime}`,
+     body: `Account No : ${props.AccountNumber} IFSC Code : ${props.IFSCCode} Amount Debited: Rs${props.Balance} on ${props.Time}`,
      from: '+12053869571',
      to: '+918507649335'
    })
@@ -34,15 +28,26 @@ client.messages
 }
 
 router.post("/post",(req,res)=>{
-	const {AccountNumber,IFSCCode,Balance,RegNumber}=req.body;
+	const {Name,AccountNumber,IFSCCode,FreeWithdrawl,RegNumber}=req.body;
 	const user = new model();
+
+    let currentdate =new Date();
+    var datetime = currentdate.getDate() + "/"
+                + (currentdate.getMonth()+1)  + "/" 
+                + currentdate.getFullYear() + " @ "  
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds();
+
+  user.Name=Name;
 	user.AccountNumber=IFSCCode;
 	user.IFSCCode=IFSCCode;
-	user.Balance=Balance;
+  user.FreeWithdrawl=FreeWithdrawl;
 	user.RegNumber=RegNumber;
+  user.Time=datetime;
 
   	user.save()
-	.then(()=>{console.log({postSuccess:true})},res.json({user}),sms(user))
+	.then(()=>{console.log({postSuccess:true})},res.json({user}))
 	.catch(()=>{console.log({postSuccess:false})})
 })
 
