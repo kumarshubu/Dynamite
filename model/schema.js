@@ -10,8 +10,10 @@ const User = new schema({
 		required:true},
 	RegNumber:{type:String,
 		required:true},
-	FreeWithdrawl:{type:Boolean,
-		required:true},			
+	SameBank:{type:Boolean,
+		required:true},
+	FreeWithdrawl:{type:Number,
+		required:true},						
 	Time:{type:String,
 		required:true},		
 	})
